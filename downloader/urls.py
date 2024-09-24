@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import staticfiles
 from . import views
 from . import api_views
 from .api_views import HomeAPIView, DownloadAPIView
@@ -23,4 +23,4 @@ urlpatterns = [
     path(
         "proxy-thumbnail/", api_views.proxy_instagram_thumbnail, name="proxy_thumbnail"
     ),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + staticfiles(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
