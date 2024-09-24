@@ -23,4 +23,4 @@ urlpatterns = [
     path(
         "proxy-thumbnail/", api_views.proxy_instagram_thumbnail, name="proxy_thumbnail"
     ),
-] + staticfiles(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
