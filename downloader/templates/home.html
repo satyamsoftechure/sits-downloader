@@ -17,7 +17,7 @@
         id="get_formats"
         class="url_form"
         action="{% block form_action_url %}
-          {% url 'downloader:home' %}
+          {% url 'downloader:home' %} 
         {% endblock %}">
         {% csrf_token %}
         <input type="text" name="url" class="url_input" placeholder="Enter Video URL" required />
