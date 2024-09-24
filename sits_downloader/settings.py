@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["192.168.1.16", "127.0.0.1", "localhost", "sits-downloader.verc
 
 API_TOKEN = "9f86d081-8749-4f43-8132-65c634727591"
 
-ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000", , "sits-downloader.vercel.app"]
+ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000", "sits-downloader.vercel.app"]
 
 
 # Application definition
