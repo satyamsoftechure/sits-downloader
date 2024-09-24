@@ -1,0 +1,14 @@
+{% extends 'home.html' %}
+
+{% block main_heading %}
+  SITS Downloader
+{% endblock %}
+
+{% block form_action_url %}
+  {% url 'downloader:index' %}
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+ 
+{% endblock %}

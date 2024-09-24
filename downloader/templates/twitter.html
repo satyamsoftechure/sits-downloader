@@ -1,0 +1,14 @@
+{% extends 'home.html' %}
+
+{% block main_heading %}
+Twitter Video Downloader
+{% endblock %}
+
+{% block form_action_url %}
+{% url 'downloader:twitter' %}
+{% endblock form_action_url %}
+
+{% block content %}
+  {{ block.super }}
+
+{% endblock %}

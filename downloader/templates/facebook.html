@@ -1,0 +1,13 @@
+{% extends 'home.html' %}
+
+{% block main_heading %}
+Facebook Video Downloader
+{% endblock %}
+
+{% block form_action_url %}
+{% url 'downloader:facebook' %}
+{% endblock form_action_url %}
+
+{% block content %}
+  {{ block.super }}
+{% endblock %}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        async function fetchFormats(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const response = await fetch('/api/home/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                const formatsSelect = document.getElementById('formats');
+                formatsSelect.innerHTML = ''; // Clear previous options
+    
+                data.formats.forEach(format => {
+                    const option = document.createElement('option');
+                    option.value = format.format_id;
+                    option.textContent = `${format.resolution} (${format.format_id})`;
+                    formatsSelect.appendChild(option);
+                });
+    
+                document.getElementById('download-section').style.display = 'block';
+            } else {
+                alert('Error fetching formats. Please try again.');
+            }
+        }
+    
+        async function downloadVideo(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const formatId = document.getElementById('formats').value;
+    
+            const response = await fetch('/api/download/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url, format_id: formatId })
+            });
+    
+            if (response.ok) {
+                // Get the filename from the Content-Disposition header
+                const disposition = response.headers.get('Content-Disposition');
+                let filename = 'downloaded_video';
+    
+                if (disposition && disposition.includes('filename=')) {
+                    const filenameMatch = disposition.match(/filename\*?=(?:UTF-8''|)(["']?)(.*?)(\1)(?:;|$)/);
+                    if (filenameMatch && filenameMatch[2]) {
+                        filename = decodeURIComponent(filenameMatch[2]);
+                    }
+                }
+    
+                // Convert response to a blob and download it
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = filename;  // Use the extracted filename
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(downloadUrl);
+            } else {
+                alert('Error downloading video. Please try again.');
+            }
+        }
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Downloader</h1>
+        <form id="fetch-form" onsubmit="fetchFormats(event)">
+            <div class="form-group">
+                <label for="url">Video URL:</label>
+                <input type="text" id="url" name="url" required>
+            </div>
+            <button type="submit">Fetch Formats</button>
+        </form>
+
+        <div id="download-section" style="display:none;">
+            <form id="download-form" onsubmit="downloadVideo(event)">
+                <div class="form-group">
+                    <label for="formats">Select Format:</label>
+                    <select id="formats" name="format_id" required>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <button type="submit">Download</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

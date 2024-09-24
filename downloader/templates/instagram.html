@@ -1,0 +1,65 @@
+{% extends 'home.html' %}
+
+{% block main_heading %}
+Instagram Video Downloader
+{% endblock %}
+
+{% block form_action_url %}
+{% url 'downloader:instagram' %}
+{% endblock form_action_url %}
+
+{% block content %}
+  {{ block.super }}
+  <div class="container individual-res">
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-6 insta-bg">
+        <a href="/instagram-Reels"><img src="/static/images/igReels.svg" class="social-icon-image"><p>Reels</p></a>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-6 insta-bg">
+        <a href="/instagram-Viewers"><img src="/static/images/igViewer.svg" class="social-icon-image"><p>Viewers</p></a>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 insta-bg">
+        <a href="/instagram"><img src="/static/images/instagram.svg" class="social-icon-image"><p>Downloader</p></a>
+      </div>
+    </div>
+  </div>
+
+    {% comment %} section step to download start {% endcomment %}
+    <section class="mt-5">
+      <h1 class="text-center">Steps to Download Youtube Video via SITS DOWNLOADER</h1>
+      <div class="steps-cont">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div>
+                <img src="/static/images/Step 1.png" alt="img" class="w-100 p-4">
+              </div>
+              <div>
+                <p class="steps-download py-2">Copy the URL</p>
+                <p class="steps-description">Open any video on Instagram and copy the URL from the url section.</p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div>
+                <img src="/static/images/Step 2.png" alt="img" class="w-100 p-4">
+              </div>
+              <div>
+                <p class="steps-download py-2">Paste in SITS Downloader</p>
+                <p class="steps-description">Paste the copied URL into the input field of the SITS Downloader and click the "Download" button.</p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div>
+                <img src="/static/images/Step 3.png" alt="img" class="w-100 p-4">
+              </div>
+              <div>
+                <p class="steps-download py-2">Select Format and Download</p>
+                <p class="steps-description">A format preview and dropdown menu will appear. Choose your desired format from dropdown and click the "Download" button to start the download.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% comment %} section step to download end {% endcomment %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Home Page
+{% endblock %}
+
+{% block content %}
+  <h1 class="text-center mb-0 mt-5 pt-3">
+    {% block main_heading %}
+      SITS Video Downloader
+    {% endblock %}
+  </h1>
+  <section class="main-form">
+    <div class="container">
+      <form method="post"
+        id="get_formats"
+        class="url_form"
+        action="{% block form_action_url %}
+          {% url 'downloader:home' %}
+        {% endblock %}">
+        {% csrf_token %}
+        <input type="text" name="url" class="url_input" placeholder="Enter Video URL" required />
+        <button type="submit">Download</button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    {% if formats and banner_url %}
+      <div class="container mb-5 p-5">
+        <div class="row">
+          <div class="col-md-5 p-0">
+            <div class="format_download_cont">
+              <img src="{{ banner_url }}" alt="{{ title }}" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-md-7 preview-border">
+            <div class="">
+              <p class="title-para">{{ title }}</p>
+              <p class="title-para">Duration : {{ duration }}</p>
+              <form method="post" action="{% url 'downloader:download_api' %}" class="download_form">
+                {% csrf_token %}
+                <input type="hidden" name="url" value="{{ url }}" />
+
+                {% regroup formats by resolution as resolutions %}
+                <div class="d-flex">
+                  <div class="format-select" style="width:200px;">
+                    <select name="format_id" required>
+                      {% for resolution in resolutions %}
+                        <option value="{{ resolution.list.0.format_id }}">{{ resolution.grouper|default:'Orignal Video' }} ({{ resolution.list.0.ext }})</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <button type="submit" class="format_download">Download <i class="fa-solid fa-download"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
