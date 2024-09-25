@@ -17,26 +17,26 @@ from rest_framework.permissions import BasePermission
 from django.views.decorators.http import require_GET
 
 
-class TokenDomainPermission(BasePermission):
-    def has_permission(self, request, view):
-        token = request.headers.get("Authorization")
-        print("token", token)
-        if not token:
-            return False
+# class TokenDomainPermission(BasePermission):
+#     def has_permission(self, request, view):
+#         token = request.headers.get("Authorization")
+#         print("token", token)
+#         if not token:
+#             return False
 
-        if token != settings.API_TOKEN:
-            return False
+#         if token != settings.API_TOKEN:
+#             return False
 
-        origin = request.headers.get("Origin")
-        if not origin:
-            return False
+#         # origin = request.headers.get("Origin")
+#         # if not origin:
+#         #     return False
 
-        allowed_domains = settings.ALLOWED_DOMAINS
-        print("allowed_domains", allowed_domains)
-        if origin not in allowed_domains:
-            return False
+#         # allowed_domains = settings.ALLOWED_DOMAINS
+#         # print("allowed_domains", allowed_domains)
+#         # if origin not in allowed_domains:
+#         #     return False
 
-        return True
+#         return True
 
 
 @require_GET
@@ -60,7 +60,7 @@ def proxy_instagram_thumbnail(request):
 
 
 class HomeAPIView(APIView):
-    permission_classes = [TokenDomainPermission]
+    # permission_classes = [TokenDomainPermission]
 
     def post(self, request):
         serializer = URLSerializer(data=request.data)
