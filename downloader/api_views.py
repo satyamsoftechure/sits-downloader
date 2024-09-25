@@ -68,7 +68,7 @@ class HomeAPIView(APIView):
             url = serializer.validated_data["url"]
             format_type = serializer.validated_data.get("format_type", "all")
 
-            formats, banner_url, title, duration, error = self.extract_video_info(url)
+            formats, banner_url, title, error = self.extract_video_info(url)
 
             if error:
                 return Response({"error": error}, status=status.HTTP_400_BAD_REQUEST)
@@ -77,7 +77,6 @@ class HomeAPIView(APIView):
                 "url": url,
                 "banner_url": banner_url,
                 "title": title,
-                "duration": duration,
             }
 
             if format_type == "all":
@@ -116,13 +115,13 @@ class HomeAPIView(APIView):
                 title = info_dict.get("title")
                 duration = info_dict.get("duration")
 
-                if duration is not None:
-                    hours = int(duration // 3600)
-                    minutes = int((duration % 3600) // 60)
-                    seconds = int(duration % 60)
-                    duration_str = f"{hours:02}:{minutes:02}:{seconds:02}"
-                else:
-                    duration_str = "Unknown"
+                # if duration is not None:
+                #     hours = int(duration // 3600)
+                #     minutes = int((duration % 3600) // 60)
+                #     seconds = int(duration % 60)
+                #     duration_str = f"{hours:02}:{minutes:02}:{seconds:02}"
+                # else:
+                #     duration_str = "Unknown"
 
                 if "instagram.com" in url and banner_url:
                     proxy_url = (
@@ -158,7 +157,7 @@ class HomeAPIView(APIView):
         except Exception as e:
             error = str(e)
 
-        return formats, banner_url, title, duration_str, error
+        return formats, banner_url, title, error
 
 
 class DownloadAPIView(APIView):
