@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-ou%e1bl4-^1q7&p^$by#o0ascmcyxmlfsag##d)ab(g1x7d-m0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.16", "127.0.0.1", "localhost", "sits-downloader.vercel.app", ".now.sh"]
+ALLOWED_HOSTS = ["192.168.1.16", "127.0.0.1", "localhost", "sits-downloader.vercel.app", ".now.sh", "sits-downloader-432qixl4b-satyam-shuklas-projects-293481e8.vercel.app"]
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = ['http://localhost:8000', 'https://sits-downloader.vercel.app']
