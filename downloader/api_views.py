@@ -179,7 +179,7 @@ class DownloadAPIView(APIView):
                     else format_id
                 ),
                 "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
-                "cookiefile": "https://sits-downloader.vercel.app/youtube_cookies.txt",
+                "cookiefile": os.environ.get("YOUTUBE_COOKIES")
             }
 
             if "mp4" in format_id:
