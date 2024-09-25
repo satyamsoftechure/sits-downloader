@@ -33,7 +33,7 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:8000', 'https://sits-downloader.verce
 
 API_TOKEN = "9f86d081-8749-4f43-8132-65c634727591"
 
-ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000"]
+ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000", "sits-downloader.vercel.app"]
 
 
 # Application definition
@@ -126,9 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Add your static directory here
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory for collected static files
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 MEDIA_URL = "/media/"

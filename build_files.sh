@@ -1,4 +1,4 @@
 echo "Build start"
 python3.12 -m pip install -r requirements.txt
-python manage.py collectstatic --noinput
+python3.12 manage.py collectstatic --noinput --clear
 echo "Build end"
