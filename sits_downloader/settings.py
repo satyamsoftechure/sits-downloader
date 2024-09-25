@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["192.168.1.16", "127.0.0.1", "localhost", "sits-downloader.verc
 
 API_TOKEN = "9f86d081-8749-4f43-8132-65c634727591"
 
-ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000"]
+ALLOWED_DOMAINS = ["127.0.0.1:8000", "localhost:8000", "192.168.1.16:8000", "sits-downloader.vercel.app"]
 
 
 # Application definition
@@ -122,12 +122,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
