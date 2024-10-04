@@ -19,9 +19,6 @@
           "includeFiles": "bin/ffmpeg"
         }
       },
-      "scripts": {
-        "postbuild": "./install_ffmpeg.sh"
-      },
     "routes": [
       {
         "src": "/(.*)",
