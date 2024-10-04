@@ -159,7 +159,7 @@ class DownloadAPIView(APIView):
                 ),
                 # Truncate the title to 50 characters to avoid long filenames
                 "outtmpl": f"/tmp/{unique_id}_%(title).50s.%(ext)s",
-                "cookiefile": "sits_downloader/youtube_cookies.txt",
+                "cookiefile": "/tmp/youtube_cookies.txt",
             }
 
             if "mp4" in format_id:
