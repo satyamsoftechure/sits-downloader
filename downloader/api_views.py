@@ -154,7 +154,7 @@ class DownloadAPIView(APIView):
                     else format_id
                 ),
                 "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
-                "cookiefile": "sits_downloader/youtube_cookies.txt",
+                "cookiefile": "/tmp/youtube_cookies.txt",
             }
 
             if "mp4" in format_id:
