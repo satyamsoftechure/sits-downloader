@@ -145,7 +145,11 @@ class DownloadAPIView(APIView):
             audio_only = serializer.validated_data.get("audio_only", False)
             video_only = serializer.validated_data.get("video_only", False)
 
-            unique_id = uuid.uuid4().hex[:8]
+            unique_id = uuid.uuid4().hex[:8]  # Unique ID
+
+            def truncate_title(title, max_length=50):
+                """ Helper function to truncate the title """
+                return title[:max_length] + "..." if len(title) > max_length else title
 
             ydl_opts = {
                 "format": (
@@ -153,8 +157,9 @@ class DownloadAPIView(APIView):
                     if not audio_only and not video_only
                     else format_id
                 ),
-                "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
-                "cookiefile": "/tmp/youtube_cookies.txt",
+                # Truncate the title to 50 characters to avoid long filenames
+                "outtmpl": f"/tmp/{unique_id}_%(title).50s.%(ext)s",
+                "cookiefile": "sits_downloader/youtube_cookies.txt",
             }
 
             if "mp4" in format_id:
@@ -170,6 +175,7 @@ class DownloadAPIView(APIView):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     result = ydl.extract_info(url, download=True)
 
+                # Prepare the output file and truncate title if necessary
                 output_file = ydl.prepare_filename(result)
 
                 with open(output_file, "rb") as f:
@@ -179,13 +185,10 @@ class DownloadAPIView(APIView):
                     file_data, content_type="application/octet-stream"
                 )
 
+                # Handle encoding and attach shortened file name for download
                 encoded_filename = urllib.parse.quote(os.path.basename(output_file))
-                print("encoded_filename", encoded_filename)
                 response["Content-Disposition"] = (
                     f'attachment; filename="{encoded_filename}"; filename*="UTF-8\'\'{encoded_filename}"'
-                )
-                print(
-                    "response['Content-Disposition']", response["Content-Disposition"]
                 )
 
                 os.remove(output_file)
