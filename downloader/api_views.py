@@ -39,14 +39,36 @@ class TokenDomainPermission(BasePermission):
         return True
 
 
+@require_GET
+def proxy_instagram_thumbnail(request):
+    url = request.GET.get("url")
+    if not url:
+        return HttpResponseBadRequest("Missing URL parameter")
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            return HttpResponse(
+                response.content, content_type=response.headers["Content-Type"]
+            )
+        else:
+            return HttpResponseBadRequest(
+                f"Failed to fetch image: HTTP {response.status_code}"
+            )
+    except requests.RequestException as e:
+        return HttpResponseBadRequest(f"Error fetching image: {str(e)}")
+
+
 class HomeAPIView(APIView):
+    permission_classes = [TokenDomainPermission]
 
     def post(self, request):
         serializer = URLSerializer(data=request.data)
         if serializer.is_valid():
             url = serializer.validated_data["url"]
+            format_type = serializer.validated_data.get("format_type", "all")
 
-            formats, banner_url, title, error = self.extract_video_info(url)
+            formats, banner_url, title, duration, error = self.extract_video_info(url)
 
             if error:
                 return Response({"error": error}, status=status.HTTP_400_BAD_REQUEST)
@@ -55,8 +77,23 @@ class HomeAPIView(APIView):
                 "url": url,
                 "banner_url": banner_url,
                 "title": title,
-                "formats": formats,
+                "duration": duration,
             }
+
+            if format_type == "all":
+                response_data["formats"] = formats
+            elif format_type == "audio":
+                response_data["audio_formats"] = [
+                    f for f in formats if f["resolution"] == "audio only"
+                ]
+            elif format_type == "video":
+                response_data["video_formats"] = [
+                    f for f in formats if f["resolution"] != "audio only"
+                ]
+            else:
+                return Response(
+                    {"error": "Invalid format type"}, status=status.HTTP_400_BAD_REQUEST
+                )
 
             return Response(response_data)
 
@@ -68,20 +105,32 @@ class HomeAPIView(APIView):
         best_audio_found = False
         banner_url = None
         title = None
+        duration = None
         error = None
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(url, download=False)
 
-                print("Available formats for video:")
-            for f in info_dict["formats"]:
-                print(
-                    f"Format ID: {f['format_id']}, Resolution: {f.get('resolution', 'audio only')}, Ext: {f['ext']}"
-                )
-
                 banner_url = info_dict.get("thumbnail")
                 title = info_dict.get("title")
+                duration = info_dict.get("duration")
+
+                if duration is not None:
+                    hours = int(duration // 3600)
+                    minutes = int((duration % 3600) // 60)
+                    seconds = int(duration % 60)
+                    duration_str = f"{hours:02}:{minutes:02}:{seconds:02}"
+                else:
+                    duration_str = "Unknown"
+
+                if "instagram.com" in url and banner_url:
+                    proxy_url = (
+                        reverse("downloader:proxy_thumbnail")
+                        + "?"
+                        + urlencode({"url": banner_url})
+                    )
+                    banner_url = proxy_url
 
                 for format in info_dict["formats"]:
                     format_id = format.get("format_id")
@@ -109,7 +158,7 @@ class HomeAPIView(APIView):
         except Exception as e:
             error = str(e)
 
-        return formats, banner_url, title, error
+        return formats, banner_url, title, duration_str, error
 
 
 class DownloadAPIView(APIView):
@@ -131,7 +180,7 @@ class DownloadAPIView(APIView):
                     else format_id
                 ),
                 "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
-                "cookiefile": "sits_downloader/youtube_cookies.txt",
+                "cookiefile": "C:/Users/Softechure/Desktop/sits_downloader/youtube_cookies.txt",
             }
 
             if "mp4" in format_id:
