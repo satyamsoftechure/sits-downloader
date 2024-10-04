@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from . import api_views
+# from . import api_views
 from .api_views import HomeAPIView, DownloadAPIView
 
 urlpatterns = [
@@ -20,7 +20,7 @@ urlpatterns = [
     path("linkedin/", views.LinkedIn, name="linkedin"),
     path("api/get-media-format/", HomeAPIView.as_view(), name="home_api"),
     path("api/get-media-file/", DownloadAPIView.as_view(), name="download_api"),
-    path(
-        "proxy-thumbnail/", api_views.proxy_instagram_thumbnail, name="proxy_thumbnail"
-    ),
+    # path(
+    #     "proxy-thumbnail/", api_views.proxy_instagram_thumbnail, name="proxy_thumbnail"
+    # ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
