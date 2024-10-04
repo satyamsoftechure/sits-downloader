@@ -154,12 +154,7 @@ class DownloadAPIView(APIView):
                     else format_id
                 ),
                 "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
-                if os.path.exists("youtube_cookies.txt"):
-                    cookiefile = "youtube_cookies.txt"
-                else:
-                    # Create a temporary cookie file in /tmp for production
-                    cookiefile = f"/tmp/youtube_cookies.txt"
-                    }
+                "cookiefile": "/tmp/youtube_cookies.txt",
 
             if "mp4" in format_id:
                 ydl_opts["merge_output_format"] = "mp4"
