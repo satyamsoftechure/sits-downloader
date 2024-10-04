@@ -66,7 +66,6 @@ class HomeAPIView(APIView):
         serializer = URLSerializer(data=request.data)
         if serializer.is_valid():
             url = serializer.validated_data["url"]
-            format_type = serializer.validated_data.get("format_type", "all")
 
             formats, banner_url, title, error = self.extract_video_info(url)
 
@@ -77,20 +76,8 @@ class HomeAPIView(APIView):
                 "url": url,
                 "banner_url": banner_url,
                 "title": title,
+                "formats": formats,
             }
-
-            if format_type == "all":
-                response_data["formats"] = formats
-            elif format_type == "audio":
-                response_data["audio_formats"] = [
-                    f for f in formats if f["resolution"] == "audio only"
-                ]
-            elif format_type == "video":
-                response_data["video_formats"] = [
-                    f for f in formats if f["resolution"] != "audio only"
-                ]
-            else:
-                response_data["formats"] = formats
 
             return Response(response_data)
 
