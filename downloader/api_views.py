@@ -90,9 +90,7 @@ class HomeAPIView(APIView):
                     f for f in formats if f["resolution"] != "audio only"
                 ]
             else:
-                return Response(
-                    {"error": "Invalid format type"}, status=status.HTTP_400_BAD_REQUEST
-                )
+                response_data["formats"] = formats
 
             return Response(response_data)
 
