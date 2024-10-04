@@ -160,6 +160,7 @@ class DownloadAPIView(APIView):
                 # Truncate the title to 50 characters to avoid long filenames
                 "outtmpl": f"/tmp/{unique_id}_%(title).50s.%(ext)s",
                 "cookiefile": "/tmp/youtube_cookies.txt",
+                "ffmpeg_location": "./bin/ffmpeg",
             }
 
             if "mp4" in format_id:
