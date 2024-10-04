@@ -155,6 +155,7 @@ class DownloadAPIView(APIView):
                 ),
                 "outtmpl": f"/tmp/{unique_id}_%(title)s.%(ext)s",
                 "cookiefile": "sits_downloader/youtube_cookies.txt",
+            }
 
             if "mp4" in format_id:
                 ydl_opts["merge_output_format"] = "mp4"
