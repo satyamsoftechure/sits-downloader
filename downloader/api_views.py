@@ -84,7 +84,7 @@ class HomeAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def extract_video_info(self, url):
-        ydl_opts = {"format": "best"}
+        ydl_opts = {"format": "best", "cookiefile" : "cookies.txt"}
         formats = []
         best_audio_found = False
         banner_url = None
